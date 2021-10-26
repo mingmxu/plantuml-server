@@ -29,70 +29,82 @@
     <link rel="shortcut icon" href="${hostpath}/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="${hostpath}/plantuml.css" />
     <link rel="stylesheet" href="${hostpath}/webjars/codemirror/3.21/lib/codemirror.css" />
-    <script src="${hostpath}/webjars/codemirror/3.21/lib/codemirror.js"></script>
-    <!-- <script src="mode/plantuml.js"></script> -->
-    <script>
-        window.onload = function() {
-            document.myCodeMirror = CodeMirror.fromTextArea(
-                document.getElementById("text"), 
-                {lineNumbers: true}
-            );
-        };
-    </script>
+    <!-- Start of CodeMirror, see https://stackoverflow.com/questions/1995370/adding-line-numbers-to-html-textarea
+    <script language="javascript" type="text/javascript" src="https://codemirror.net/lib/codemirror.js"></script>
+    <script language="javascript" type="text/javascript" src="https://codemirror.net/mode/shell/shell.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://codemirror.net/lib/codemirror.css"></link>
+    <link rel="stylesheet" type="text/css" href="https://codemirror.net/theme/liquibyte.css"></link>
+    End of CodeMirror -->
     <title>PlantUMLServer</title>
 </head>
 <body>
+<%-- PAGE TITLE --%>
 <div id="header">
-    <%-- PAGE TITLE --%>
-    <h1>PlantUML Server</h1>
-    <c:if test="${cfg['SHOW_SOCIAL_BUTTONS'] eq 'on' }">
-        <%@ include file="resource/socialbuttons1.html" %>
-    </c:if>
-    <c:if test="${cfg['SHOW_GITHUB_RIBBON'] eq 'on' }">
-        <%@ include file="resource/githubribbon.html" %>
-    </c:if>
-    <p>Create your <a href="https://plantuml.com">PlantUML</a> diagrams directly in your browser !</p>
+    <h3>PlantUML Server</h3>
+    <p>Resources:
+        <a href="https://plantuml.com/sequence-diagram" target="_blank">Sequence</a>,
+        <a href="https://plantuml.com/class-diagram" target="_blank">Class</a>,
+        <a href="https://plantuml.com/component-diagram" target="_blank">Component</a>,
+        <a href="https://plantuml.com/deployment-diagram" target="_blank">Deployment</a>,
+        <a href="https://crashedmind.github.io/PlantUMLHitchhikersGuide/layout/layout.html" target="_blank">Layout</a>,
+        <a href="https://crashedmind.github.io/PlantUMLHitchhikersGuide/color/color.html" target="_blank">Color</a>,
+        <a href="https://crashedmind.github.io/PlantUMLHitchhikersGuide/diagramAnnotation/diagramAnnotation.html" target="_blank">Annotation</a>,
+        <a href="https://real-world-plantuml.com/">Real World PlantUML</a>,
+    </p>
 </div>
+
+<%--<div id="preurl">--%>
+<%--    <p>You can enter here a previously generated URL:</p>--%>
+<%--    <form method="post" action="${contextroot}/form">--%>
+<%--        <p>--%>
+<%--            <input type="submit" value="Restore UML"/>--%>
+<%--            <input name="url" type="text" size="100" value="${imgurl}" />--%>
+<%--        </p>--%>
+<%--    </form>--%>
+<%--</div>--%>
+
+<%-- CONTENT --%>
 <div id="content">
-    <%-- CONTENT --%>
-    <form method="post" accept-charset="UTF-8"  action="${contextroot}/form">
-        <p>
-            <textarea id="text" name="text" cols="120" rows="10"><c:out value="${decoded}"/></textarea>
-            <input type="submit" />
-        </p>
-    </form>
-    <hr/>
-    <p>You can enter here a previously generated URL:</p>
-    <form method="post" action="${contextroot}/form">
-        <p>
-            <input name="url" type="text" size="150" value="${imgurl}" />
-            <br/>
-            <input type="submit"/>
-        </p>
-    </form>
-    <c:if test="${!empty imgurl}">
-        <hr/>
-        <a href="${svgurl}">View as SVG</a>&nbsp;
-        <a href="${txturl}">View as ASCII Art</a>&nbsp;
-        <c:if test="${!empty mapurl}">
-            <a href="${mapurl}">View Map Data</a>
+    <div id="umlcode">
+        <form method="post" accept-charset="UTF-8"  action="${contextroot}/form">
+            <p>
+                <input type="submit" value="Refresh UML" />
+                <textarea id="umltext" name="text" cols="120" rows="20"><c:out value="${decoded}"/></textarea>
+            </p>
+        </form>
+    </div>
+
+    <div id="umlimg">
+        <c:if test="${!empty imgurl}">
+            <a href="${svgurl}" target="_blank">View as SVG</a>&nbsp;
+            <a href="${txturl}" target="_blank">View as ASCII Art</a>&nbsp;
+            <c:if test="${!empty mapurl}">
+                <a href="${mapurl}">View Map Data</a>
+            </c:if>
+            <c:if test="${cfg['SHOW_SOCIAL_BUTTONS'] == 'on' }">
+                <%@ include file="resource/socialbuttons2.jspf" %>
+            </c:if>
+            <p id="diagram">
+                <c:choose>
+                    <c:when test="${!empty mapurl}">
+                        <img src="${imgurl}" alt="PlantUML diagram" />
+                    </c:when>
+                    <c:otherwise>
+                        <img src="${imgurl}" alt="PlantUML diagram" />
+                    </c:otherwise>
+                </c:choose>
+            </p>
         </c:if>
-        <c:if test="${cfg['SHOW_SOCIAL_BUTTONS'] == 'on' }">
-            <%@ include file="resource/socialbuttons2.jspf" %>
-        </c:if>
-        <p id="diagram">
-            <c:choose>
-            <c:when test="${!empty mapurl}">
-                <img src="${imgurl}" alt="PlantUML diagram" />
-            </c:when>
-            <c:otherwise>
-                <img src="${imgurl}" alt="PlantUML diagram" />
-            </c:otherwise>
-            </c:choose>
-        </p>
-    </c:if>
+    </div>
 </div>
 <%-- FOOTER --%>
 <%@ include file="footer.jspf" %> 
 </body>
+<script type="text/javascript">
+    var editor = CodeMirror.fromTextArea(document.getElementById("umltext_123"), {
+        lineNumbers: true,
+        mode: 'text/x-sh',
+        theme: 'liquibyte',
+    });
+</script>
 </html>

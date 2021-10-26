@@ -13,44 +13,67 @@ h1, p, #content a {
     margin-left: auto;
     margin-right: auto;    
     text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10%;
+    background: tan;
 }
 
 /* Content */
 #content {
     margin-left: auto;
     margin-right: auto;
-    width: 95%;    
+    position: fixed;
+    top: 10%;
+    bottom: 5%;
+    left: 0;
+    right: 0;
+    overflow: auto;
+}
+
+#umlcode {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 38%;
+    margin-left: 1%;
+}
+
+#umlimg {
+    position: absolute;
+    margin-left: 1%;
+    width: 60%;
+    top: 0;
+    right: 0;
 }
 
 /* Form inputs */
-#content textarea, #content .CodeMirror, #content input[type=text] {
-    background-color: #ffc;
+#umltext {
     font-family: monospace;
     font-size: medium;
-    width: 100%;
     resize: vertical;
-}
+    width: 95%;
+    height: 75vh;
 
-#content input[type=text] {
-    border: 0;
-}
-
-/* Diagram */
-#content #diagram {
-    text-align: center;
-}
-
-#content #diagram img {
-    border: medium solid green;
-    padding: 10px;
+    background: #ffc url(linenumber.png) no-repeat local;
+    padding-left: 35px;
+    padding-top: 10px;
 }
 
 /* Footer */
-#footer p {
+#footer {
     background-color: #eee;
     color: #666;
     font-size: 0.7em;
     padding: 2px;
     text-align: center;
     width: 100%;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5%;
 }
