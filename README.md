@@ -109,7 +109,7 @@ So, you can use following command to create a self-contained docker image that w
 *Note: Generate the WAR (instructions further below) prior to running "docker build"*
 
 ```sh
-docker image build -t plantuml-server:local .
+docker image build -t plantuml-server:local -f ./Dockerfile.jetty .
 docker run -d -p 8080:8080 plantuml-server:local
 ```
 The server is now listening to [http://localhost:8080/plantuml](http://localhost:8080/plantuml).
